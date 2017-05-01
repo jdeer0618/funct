@@ -16,33 +16,29 @@
 # under the License.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
+import re
 from splunklib.searchcommands import dispatch, StreamingCommand, Configuration, Option, validators
 import sys
-import re
-
 
 @Configuration()
 class functCommand(StreamingCommand):
-    """ Counts the number of non-overlapping matches to a regular expression in a set of fields.
+    """ Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation will have an 'R' type methodoligy applied to them.
 
     ##Syntax
 
     .. code-block::
-        countmatches fieldname=<field> pattern=<regular_expression> <field-list>
+        funct fieldname=<field> <field-list>
 
     ##Description
 
-    A count of the number of non-overlapping matches to the regular expression specified by `pattern` is computed for
-    each record processed. The result is stored in the field specified by `fieldname`. If `fieldname` exists, its value
-    is replaced. If `fieldname` does not exist, it is created. Event records are otherwise passed through to the next
-    pipeline processor unmodified.
+    Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation will have an 'R' type methodoligy applied to them.
 
     ##Example
 
-    Count the number of words in the `text` of each tweet in tweets.csv and store the result in `word_count`.
+    Apply `funct` command to the host field in the Splunk _internal events and store them in a field called `host_funct`.
 
     .. code-block::
-        | inputlookup tweets | countmatches fieldname=word_count pattern="\\w+" text
+        index=_internal | funct host fieldname=host_funct
 
     """
     fieldname = Option(

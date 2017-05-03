@@ -16,13 +16,15 @@
 # under the License.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-from splunklib.searchcommands import dispatch, StreamingCommand, Configuration, Option, validators
+#import app
 import re
+
+from splunklib.searchcommands import dispatch, StreamingCommand, Configuration, Option, validators
 import sys
 
 @Configuration()
 class functCommand(StreamingCommand):
-    """ Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation will have an 'R' type methodoligy applied to them.
+    """ Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation w        ill have an 'R' type methodoligy applied to them.
 
     ##Syntax
 
@@ -31,14 +33,15 @@ class functCommand(StreamingCommand):
 
     ##Description
 
-    Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation will have an 'R' type methodoligy applied to them.
+    Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation w
+    ill have an 'R' type methodoligy applied to them.
 
     ##Example
 
     Apply `funct` command to the host field in the Splunk _internal events and store them in a field called `host_funct`.
 
     .. code-block::
-        index=_internal | funct host fieldname=host_funct
+        index=_internal | funct host fieldname=host_funct 
 
     """
     fieldname = Option(
@@ -47,20 +50,27 @@ class functCommand(StreamingCommand):
         **Description:** Name of the field that will hold the match count''',
         require=True, validate=validators.Fieldname())
 
+    char_limit = Option(
+        doc='''
+        **Syntax:** **char_limit=***<positive int>*
+        **Description:** Determines how many characters in a field to process. Default is 15''',
+        require=False, validate=validators.Integer(maximum=100), default=15)
+
     def stream(self, records):
         self.logger.debug('functCommand: %s', self)  # logs command line
         for record in records:
             for fieldname in self.fieldnames:
-                x = record[fieldname]
-                if re.search(r'\W{1}', record[fieldname]):
-                   x = re.sub(r'\w', "", x)
-                   x = re.sub(r'\s', "_", x)
-                   record[self.fieldname] = x
-                else:
-                   x = re.sub(r'[B-Z]', "A", x)
-                   x = re.sub(r'[b-z]', "a", x)
-                   x = re.sub(r'[0-8]', "9", x)
-                   x = re.sub(r'\s', "w", x)
-                   record[self.fieldname] = x
-            yield record
+		char_limit = self.char_limit
+		x = record[fieldname][0:char_limit]
+		if re.search(r'\W{1}', record[fieldname]):
+    		   x = re.sub(r'\w', "", x)
+    		   x = re.sub(r'\s', "_", x)
+    		   record[self.fieldname] = x
+  		else:
+    		   x = re.sub(r'[B-Z]', "A", x)
+    		   x = re.sub(r'[b-z]', "a", x)
+    		   x = re.sub(r'[0-8]', "9", x)
+		   x = re.sub(r'\s', "w", x)
+		   record[self.fieldname] = x
+            yield record 
 dispatch(functCommand, sys.argv, sys.stdin, sys.stdout, __name__)

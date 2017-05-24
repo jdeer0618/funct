@@ -24,26 +24,7 @@ import sys
 
 @Configuration()
 class functCommand(StreamingCommand):
-    """ Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation w        ill have an 'R' type methodoligy applied to them.
 
-    ##Syntax
-
-    .. code-block::
-        funct fieldname=<field> <field-list>
-
-    ##Description
-
-    Extends Splunk 'punct' methodoligy to fields that contain punctuation. Event fields that do not contain punctuation w
-    ill have an 'R' type methodoligy applied to them.
-
-    ##Example
-
-    Apply `funct` command to the host field in the Splunk _internal events and store them in a field called `host_funct`.
-
-    .. code-block::
-        index=_internal | funct host fieldname=host_funct 
-
-    """
     fieldname = Option(
         doc='''
         **Syntax:** **fieldname=***<fieldname>*
@@ -53,8 +34,8 @@ class functCommand(StreamingCommand):
     char_limit = Option(
         doc='''
         **Syntax:** **char_limit=***<positive int>*
-        **Description:** Determines how many characters in a field to process. Default is 15''',
-        require=False, validate=validators.Integer(maximum=100), default=15)
+        **Description:** Determines how many characters in a field to process. Default is 150''',
+        require=False, validate=validators.Integer(maximum=10000), default=150)
 
     def stream(self, records):
         self.logger.debug('functCommand: %s', self)  # logs command line
@@ -72,5 +53,5 @@ class functCommand(StreamingCommand):
     		   x = re.sub(r'[0-8]', "9", x)
 		   x = re.sub(r'\s', "w", x)
 		   record[self.fieldname] = x
-            yield record 
+            yield record
 dispatch(functCommand, sys.argv, sys.stdin, sys.stdout, __name__)

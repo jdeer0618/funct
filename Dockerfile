@@ -6,8 +6,8 @@ ENV SPLUNK_APP_INSPECT_VERSION 1.4.1.88
 # ADD ./apps/*.tgz /opt/splunk/etc/apps/
 
 #Test and build Funct App
-RUN apt-get update && apt-get install -y git python-pip libxml2-dev libxslt-dev lib32z1-dev python-lxml
-COPY ./apps/app-inspect/splunk-appinspect-${SPLUNK_APP_INSPECT_VERSION}.tar.gz /opt/inpsect/splunk-appinspect-${SPLUNK_APP_INSPECT_VERSION}.tar.gz
+RUN apt-get update && apt-get install -y git
+# COPY ./apps/app-inspect/splunk-appinspect-${SPLUNK_APP_INSPECT_VERSION}.tar.gz /opt/inpsect/splunk-appinspect-${SPLUNK_APP_INSPECT_VERSION}.tar.gz
 RUN git clone https://github.com/jdeer0618/funct.git /tmp/
 #    && cp -r /tmp/funct/src /opt/splunk/etc/apps/funct \
 #    && chown -R ${SPLUNK_USER}:${SPLUNK_USER} /opt/splunk/etc/apps/funct

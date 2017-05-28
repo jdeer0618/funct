@@ -1,4 +1,4 @@
-FROM iam6a64/splunk:latest
+FROM iam6a64/docker-splunk:latest
 
 ENV SPLUNK_APP_INSPECT_VERSION 1.4.1.88
 

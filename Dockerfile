@@ -3,7 +3,7 @@ FROM iam6a64/docker-splunk:latest
 ENV SPLUNK_APP_INSPECT_VERSION 1.4.1.88
 
 # Add apps
-ADD ./apps/*.tgz /opt/splunk/etc/apps/
+# ADD ./apps/*.tgz /opt/splunk/etc/apps/
 
 #Test and build Funct App
 RUN apt-get update && apt-get install -y git python-pip libxml2-dev libxslt-dev lib32z1-dev python-lxml

@@ -1,6 +1,6 @@
 FROM iam6a64/docker-splunk:latest
 
-ENV SPLUNK_APP_INSPECT_VERSION 1.4.1.88
+# ENV SPLUNK_APP_INSPECT_VERSION 1.4.1.88
 
 # Add apps
 # ADD ./apps/*.tgz /opt/splunk/etc/apps/
@@ -15,5 +15,5 @@ RUN git clone https://github.com/jdeer0618/funct.git /tmp/
 
 
 # Make some tweaks
-COPY ./files/default-mode.conf /opt/splunk/etc/system/local/
-RUN touch /opt/splunk/etc/.ui_login
+# COPY ./files/default-mode.conf /opt/splunk/etc/system/local/
+# RUN touch /opt/splunk/etc/.ui_login

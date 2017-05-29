@@ -8,7 +8,7 @@ ENV SPLUNK_USER splunk
 #Test and build Funct App
 RUN apt-get update && apt-get install -y git \
     && git clone https://github.com/jdeer0618/funct.git /tmp/funct/ \
-    && cp -r /tmp/funct/src/ /opt/splunk/etc/apps/funct/
+    && cp -r /tmp/funct/src/ /opt/splunk/etc/apps/funct/ \
     && chown -R ${SPLUNK_USER}:${SPLUNK_USER} /opt/splunk/etc/apps/funct
 # RUN pip install /opt/inspect/splunk-appinspect-${SPLUNK_APP_INSPECT_VERSION}.tar.gz
 
